@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <title>PRODBYYSLL — BEATS & LICENSING</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#000000; --panel:#080808; --line:#242424; --muted:#777; --white:#f5f5f5; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; color:var(--white); background:#000000; font-family:"Space Grotesk",sans-serif; overflow-x:hidden; }
+    .wrap { width:min(1120px,calc(100% - 48px)); margin:auto; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:26px 0; border-bottom:1px solid var(--line); }
+    .logo { font:500 11px "DM Mono",monospace; letter-spacing:.18em; color:#aaa; }
+    .status { display:flex; align-items:center; gap:9px; font:11px "DM Mono",monospace; color:#888; letter-spacing:.12em; text-transform:uppercase; }
+    .dot { width:6px;height:6px;border-radius:50%;background:#eee;box-shadow:0 0 9px #ffffff66; }
+    .hero { min-height:430px; display:flex; flex-direction:column; justify-content:center; padding:90px 0 80px; position:relative; }
+    .eyebrow { color:#888; font:11px "DM Mono",monospace; letter-spacing:.22em; text-transform:uppercase; margin:0 0 22px 4px; animation:rise .8s both; }
+    h1 { margin:0; max-width:1000px; font-size:clamp(42px,8.2vw,104px); line-height:.94; letter-spacing:-.075em; font-weight:700; }
+    h1 span { display:block; overflow:hidden; }
+    h1 .line { display:block; animation:titleIn 1s cubic-bezier(.2,.8,.2,1) both; }
+    h1 .line.second { animation-delay:.14s; color:transparent; -webkit-text-stroke:1px #888; }
+    .hero-bottom { display:flex; justify-content:space-between; align-items:end; gap:24px; margin-top:34px; animation:rise 1s .4s both; }
+    .intro { color:#858585; max-width:390px; font-size:14px; line-height:1.7; margin:0; }
+    .scroll { color:#666; font:10px "DM Mono",monospace; letter-spacing:.15em; text-transform:uppercase; white-space:nowrap; }
+    
+    .section-head { display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding:22px 0 18px; margin-top:40px; }
+    .section-head h2 { font:11px "DM Mono",monospace; letter-spacing:.18em; text-transform:uppercase; color:#aaa; margin:0; }
+    .count { font:11px "DM Mono",monospace; color:#555; }
+    
+    .folders { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding-bottom:40px; }
+    .folder { border:1px solid #202020; background:#050505; transition:border-color .25s,background .25s,transform .25s; }
+    .folder:hover { border-color:#777; background:#090909; transform:translateY(-2px); }
+    .folder-btn { width:100%; display:flex; align-items:center; gap:16px; text-align:left; border:0; background:none; color:inherit; padding:22px; cursor:pointer; font:inherit; }
+    .folder-icon { width:38px;height:30px; flex:0 0 auto; position:relative; border:1px solid #777; border-radius:2px; opacity:.85; }
+    .folder-icon::before { content:""; position:absolute; width:16px;height:5px; top:-6px;left:2px; border:1px solid #777; border-bottom:0; border-radius:2px 2px 0 0; background:#050505; }
+    .folder-info { flex:1; min-width:0; }
+    .folder-name { display:block; font-size:18px; font-weight:600; letter-spacing:-.03em; text-transform:uppercase; }
+    .folder-sub { display:block; margin-top:5px; color:#666; font:10px "DM Mono",monospace; letter-spacing:.1em; text-transform:uppercase; }
+    .folder-arrow { color:#777; font-size:19px; transition:transform .25s,color .25s; }
+    .folder.open .folder-arrow { transform:rotate(45deg); color:#fff; }
+    .tracks { display:none; border-top:1px solid var(--line); padding:8px 18px 16px; }
+    .folder.open .tracks { display:block; animation:fadeIn .3s both; }
+    .track { display:grid; grid-template-columns:30px 1fr auto; align-items:center; gap:12px; padding:13px 4px; border-bottom:1px solid #1d1d1d; }
+    .track:last-child { border-bottom:0; }
+    .track-no { color:#555; font:10px "DM Mono",monospace; }
+    .track-name { font-size:13px; color:#ddd; }
+    audio { width:100%; max-width:220px; height:30px; filter:grayscale(1) invert(1); opacity:.8; }
+    .empty { color:#666; font:11px "DM Mono",monospace; padding:16px 4px; }
+    
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:40px; }
+    .info-card { border:1px solid #202020; background:#050505; padding:24px; transition:border-color .25s; }
+    .info-card:hover { border-color:#555; }
+    .card-title { font-size:16px; font-weight:600; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 16px 0; color:#fff; border-bottom:1px solid #1a1a1a; padding-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+    .card-title .price { font-family:"DM Mono",monospace; font-size:14px; color:#aaa; font-weight:400; }
+    .info-list { list-style:none; padding:0; margin:0; font-size:13px; color:#888; line-height:1.7; }
+    .info-list li { margin-bottom:10px; position:relative; padding-left:14px; }
+    .info-list li::before { content:"—"; position:absolute; left:0; color:#444; }
+    .info-list li strong { color:#ddd; font-weight:500; }
+    
+    .steps-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:60px; }
+    .step-card { border:1px solid #202020; background:#050505; padding:20px; position:relative; }
+    .step-num { font:500 12px "DM Mono",monospace; color:#444; margin-bottom:12px; display:block; }
+    .step-text { font-size:13px; color:#ccc; margin:0; line-height:1.5; font-weight:500; }
+
+    footer { border-top:1px solid var(--line); padding:26px 0 34px; display:flex; justify-content:space-between; gap:20px; align-items:center; color:#666; font:10px "DM Mono",monospace; letter-spacing:.1em; text-transform:uppercase; }
+    .ig { color:#000; background:#f2f2f2; text-decoration:none; padding:12px 17px; font:500 10px "DM Mono",monospace; letter-spacing:.12em; transition:background .2s,transform .2s; }
+    .ig:hover { background:#ccc; transform:translateY(-2px); }
+    
+    @keyframes titleIn { from { transform:translateY(110%); opacity:0; filter:blur(8px); } to { transform:translateY(0); opacity:1; filter:blur(0); } }
+    @keyframes rise { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+    
+    @media(max-width:850px) {
+      .steps-grid { grid-template-columns:repeat(2, 1fr); }
+    }
+    @media(max-width:650px) {
+      .wrap { width:min(100% - 32px,1120px); }
+      header { padding:20px 0; }
+      .hero { min-height:390px; padding:76px 0 65px; }
+      .hero-bottom { align-items:start; flex-direction:column; }
+      .folders { grid-template-columns:1fr; padding-bottom:30px; }
+      .steps-grid { grid-template-columns:1fr; }
+      .track { grid-template-columns:24px 1fr; }
+      .track audio { grid-column:2; max-width:none; width:100%; }
+      footer { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">YSLL® / PRODUCER ARCHIVE</div>
+      <div class="status"><span class="dot"></span> previews available</div>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Independent producer // beat catalogue</p>
+        <h1>
+          <span><span class="line">PRODBYYSLL</span></span>
+          <span><span class="line second">— BEATS (PREVIEW)</span></span>
+        </h1>
+        <div class="hero-bottom">
+          <p class="intro">A collection of sounds, ideas and unfinished worlds.<br>Choose a folder and press play.</p>
+          <div class="scroll">↓ &nbsp; Explore the archive</div>
+        </div>
+      </section>
+
+      <!-- BEAT ARCHIVE SECTION -->
+      <section>
+        <div class="section-head">
+          <h2>Beat archive / folders</h2>
+          <span class="count">06 CATEGORIES</span>
+        </div>
+        
+        <!-- HARDCODED HTML FOLDERS FOR 100% GUARANTEED RENDERING WITHOUT DEPENDING ON JS EXECUTION -->
+        <div class="folders">
+          
+          <article class="folder">
+            <button class="folder-btn" type="button">
+              <span class="folder-icon" aria-hidden="true"></span>
+              <span class="folder-info">
+                <span class="folder-name">EXPERIMENT</span>
+                <span class="folder-sub">Unusual sounds / 00 TRACKS</span>
+              </span>
+              <span class="folder-arrow">＋</span>
+            </button>
+            <div class="tracks">
+              <div class="empty">NO BEATS ADDED YET — CHECK BACK SOON</div>
+            </div>
+          </article>
+
+          <article class="folder">
+            <button class="folder-btn" type="button">
+              <span class="folder-icon" aria-hidden="true"></span>
+              <span class="folder-info">
+                <span class="folder-name">TRAP</span>
+                <span class="folder-sub">Modern trap / 00 TRACKS</span>
+              </span>
+              <span class="folder-arrow">＋</span>
+            </button>
+            <div class="tracks">
+              <div class="empty">NO BEATS ADDED YET — CHECK BACK SOON</div>
+            </div>
+          </article>
+
+          <article class="folder">
+            <button class="folder-btn" type="button">
+              <span class="folder-icon" aria-hidden="true"></span>
+              <span class="folder-info">
+                <span class="folder-name">RAGE</span>
+                <span class="folder-sub">High energy synth / 00 TRACKS</span>
+              </span>
+              <span class="folder-arrow">＋</span>
+            </button>
+            <div class="tracks">
+              <div class="empty">NO BEATS ADDED YET — CHECK BACK SOON</div>
+            </div>
+          </article>
+
+          <article class="folder">
+            <button class="folder-btn" type="button">
+              <span class="folder-icon" aria-hidden="true"></span>
+              <span class="folder-info">
+                <span class="folder-name">DETROIT</span>
+                <span class="folder-sub">Bounce & fast cadence / 00 TRACKS</span>
+              </span>
+              <span class="folder-arrow">＋</span>
+            </button>
+            <div class="tracks">
+              <div class="empty">NO BEATS ADDED YET — CHECK BACK SOON</div>
+            </div>
+          </article>
+
+          <article class="folder">
+            <button class="folder-btn" type="button">
+              <span class="folder-icon" aria-hidden="true"></span>
+              <span class="folder-info">
+                <span class="folder-name">CRANK</span>
+                <span class="folder-sub">Hard / energetic / 00 TRACKS</span>
+              </span>
+              <span class="folder-arrow">＋</span>
+            </button>
+            <div class="tracks">
+              <div class="empty">NO BEATS ADDED YET — CHECK BACK SOON</div>
+            </div>
+          </article>
+
+          <article class="folder">
+            <button class="folder-btn" type="button">
+              <span class="folder-icon" aria-hidden="true"></span>
+              <span class="folder-info">
+                <span class="folder-name">AMBIENT</span>
+                <span class="folder-sub">Atmospheric textures / 00 TRACKS</span>
+              </span>
+              <span class="folder-arrow">＋</span>
+            </button>
+            <div class="tracks">
+              <div class="empty">NO BEATS ADDED YET — CHECK BACK SOON</div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- USAGE RULES SECTION -->
+      <section>
+        <div class="section-head">
+          <h2>01 / Usage Rules</h2>
+          <span class="count">TERMS</span>
+        </div>
+        <div class="info-grid">
+          <div class="info-card" style="grid-column: 1 / -1;">
+            <ul class="info-list">
+              <li>All free beats contain a producer tag, which is removed after purchase.</li>
+              <li>Free downloads are for non-profit use only (demos, writing lyrics, SoundCloud/YouTube without monetization).</li>
+              <li>Credit required: <strong>(prodbyysll)</strong>.</li>
+              <li>Free downloads cannot be released on Spotify, Apple Music, Tidal or other monetized streaming platforms.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRICING & LICENSING SECTION -->
+      <section>
+        <div class="section-head">
+          <h2>02 / Pricing & Licensing</h2>
+          <span class="count">OPTIONS</span>
+        </div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="card-title">Basic License <span class="price">$25</span></div>
+            <ul class="info-list">
+              <li>MP3 / WAV format</li>
+              <li>Untagged audio files</li>
+              <li>Up to 50,000 streams</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="card-title">Trackout / Stems <span class="price">$65</span></div>
+            <ul class="info-list">
+              <li>Untagged master audio</li>
+              <li>Separated audio tracks (Stems)</li>
+              <li>Higher streaming allowance</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="card-title">Exclusive Rights <span class="price">DM FOR PRICE</span></div>
+            <ul class="info-list">
+              <li>Negotiable via Instagram DM</li>
+              <li>Full ownership rights</li>
+              <li>Beat is removed from the store after purchase</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW TO BUY SECTION -->
+      <section>
+        <div class="section-head">
+          <h2>03 / How To Buy</h2>
+          <span class="count">PROCESS</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">STEP 01</span>
+            <p class="step-text">Choose your beat from the catalogue.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">STEP 02</span>
+            <p class="step-text">DM Instagram <strong style="color:#fff;">@prodbyysll</strong>.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">STEP 03</span>
+            <p class="step-text">Payment via PayPal, Revolut or bank transfer.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">STEP 04</span>
+            <p class="step-text">Untagged files & license agreement delivered after payment.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 PRODBYYSLL — ALL RIGHTS RESERVED</span>
+      <a class="ig" href="https://instagram.com/prodbyysll" target="_blank" rel="noopener">DM ON INSTAGRAM ↗</a>
+    </footer>
+  </div>
+
+  <script>
+    // Accordion toggle script
+    document.querySelectorAll('.folder').forEach(folder => {
+      const btn = folder.querySelector('.folder-btn');
+      btn.addEventListener('click', () => {
+        const isOpen = folder.classList.contains('open');
+        document.querySelectorAll('.folder.open').forEach(f => f.classList.remove('open'));
+        if (!isOpen) {
+          folder.classList.add('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
